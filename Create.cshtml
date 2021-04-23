@@ -1,0 +1,235 @@
+﻿@model TestA.Models.Patient
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="content-body">
+    <div class="row match-height">
+        <div class="col-xs-12">
+            <div class="card" style="background-color:aliceblue;">
+                <div class="card-header card-info">
+                    <h4 class="card-title" style="text-align:left;color:red;"><b>Patient Form </b></h4>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <form asp-action="Create" asp-controller="Sample" method="post" enctype="multipart/form-data">
+                            @*<form method="post" asp-action="Create">*@
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            @*<div class="form-group">
+                                    <label asp-for="Id" class="control-label"></label>
+                                    <input asp-for="Id" class="form-control" />
+                                    <span asp-validation-for="Id" class="text-danger"></span>
+                                </div>*@
+
+                            <div class="form-group">
+                                <label asp-for="Photo" class="control-label"></label>
+                                <input asp-for="Photo" class="form-control" type="file" id="Image" />
+                                <span asp-validation-for="Photo" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="FullName" class="control-label"></label>
+                                <input asp-for="FullName" class="form-control" id="fname" />
+                                <span asp-validation-for="FullName" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="Gender" class="control-label"></label>
+                                <input type="radio" asp-for="Gender" value="M" />Male
+                                <input type="radio" asp-for="Gender" value="F" />Female
+                                <span asp-validation-for="Gender" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="DOB" class="control-label"></label>
+                                <input type="text" class="form-control" id="dob" onblur="CalculateAge(this)" />
+                                @*<input asp-for="DOB" class="form-control" id="dob" onblur="CalculateAge(this)" />*@
+                                <span asp-validation-for="DOB" class="text-danger" id="lblError"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="Age" class="control-label" id="lblAge"></label>
+                                @*<input asp-for="Age" class="form-control"  />*@
+                                <span asp-validation-for="Age" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="CaseType" class="control-label"></label>
+                                <select asp-for="CaseType" class="form-control" id="types">
+                                    <option value="">-- Select CaseType --</option>
+                                    <option value="Male" id="types"> MLC </option>
+                                    <option value="Female">Normal</option>
+                                </select>
+                                <span asp-validation-for="CaseType" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="EnquiryRemark" id="remark" class="control-label"></label>
+                                <input asp-for="EnquiryRemark" class="form-control" id="remark" onblur="remarktype" />
+                                <span asp-validation-for="EnquiryRemark" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="PresentAddresss" class="control-label"></label>
+                                <input asp-for="PresentAddresss" class="form-control" id="paddress" />
+                                <span asp-validation-for="PresentAddresss" class="text-danger"></span>
+                            </div>
+                            <div>
+                                <label>
+                                    <input type="checkbox" name="homepostalcheck" id="homepostalcheck" />Same as above:
+                                </label>
+
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="PermanentAddresss" class="control-label"></label>
+                                <input asp-for="PermanentAddresss" class="form-control" type="text" id="taddress" />
+                                <span asp-validation-for="PermanentAddresss" class="text-danger"></span>
+                            </div>
+                            <div class="form-actions right">
+                                <button type="button" class="btn btn-danger mr-1" onclick="location.href='@Url.Action("Index", "Sample")'">
+                                    <i class="icon-cross2"></i> Cancel
+                                </button>
+                                <button type="submit" class="btn btn-info mr-1" id="Save">
+                                    <i class="icon-check2"></i> Save
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+
+<script src="~/js/site.js"></script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script type="text/javascript">
+    function CalculateAge(birthday) {
+
+        var re = /^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d+$/;
+
+        if (birthday.value != '') {
+
+            if (re.test(birthday.value)) {
+                birthdayDate = new Date(birthday.value);
+                dateNow = new Date();
+
+                var years = dateNow.getFullYear() - birthdayDate.getFullYear();
+                var months = dateNow.getMonth() - birthdayDate.getMonth();
+                var days = dateNow.getDate() - birthdayDate.getDate();
+                if (isNaN(years)) {
+
+                    document.getElementById('lblAge').innerHTML = '';
+                    document.getElementById('lblError').innerHTML = 'Input date is incorrect!';
+                    return false;
+
+                }
+
+                else {
+                    document.getElementById('lblError').innerHTML = '';
+
+                    if (months < 0 || (months == 0 && days < 0)) {
+                        years = parseInt(years) - 1;
+                        document.getElementById('lblAge').innerHTML = years + ' Years '
+                    }
+                    else {
+                        document.getElementById('lblAge').innerHTML = years + ' Years '
+                    }
+                }
+            }
+            else {
+                document.getElementById('lblError').innerHTML = 'Date must be mm/dd/yyyy format';
+                return false;
+            }
+        }
+    }
+
+
+    function UploadFile() {
+
+        var fileUpload = $("#Image").get(0);
+
+        var files = fileUpload.files;
+
+        var data = new FormData();
+
+        data.append(files[0].name, files[0]);
+
+        $.ajax({
+
+            type: "POST",
+
+            url: "/Sample/Upload_File",
+
+            contentType: false,
+
+            processData: false,
+
+            data: data,
+
+            async: false,
+
+            beforeSend: function () {
+
+                $("#Image").show()
+
+            },
+
+            success: function (message) {
+
+                alert(message);
+
+            },
+
+            error: function () {
+
+                alert("Error!");
+
+            },
+
+            complete: function () {
+
+                $("#Image").hide()
+
+            }
+
+        });
+
+    }
+    function setBillingAddress() {
+        if ($("#homepostalcheck").is(":checked")) {
+            $('#paddress').val($('#taddress').val());
+            $('#paddress').attr('disabled', 'disabled');
+        } else {
+            $('#paddress').removeAttr('disabled');
+        }
+    }
+
+    $('#homepostalcheck').click(function () {
+        setBillingAddress();
+    })
+
+</script>
+
+
+<script type="text/javascript">
+    $(function () {
+        $("#types").change(function () {
+            if ($(this).val() == "MLC") {
+                $("#remark").show();
+            } else {
+                $("#remark").hide();
+            }
+        });
+    });
+</script>

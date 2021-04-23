@@ -1,0 +1,134 @@
+﻿@model IEnumerable<TestA.Models.Patient>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .container a {
+        font-family: 'Adobe Arabic';
+        font-size: 25px;
+    }
+
+    form p label {
+        width: 10%;
+    }
+
+    form p input[type="text"], form p input[type="number"], form p select {
+        width: 20%;
+    }
+
+    form p span {
+        width: 20%;
+        color: Red;
+    }
+
+    form p button, table button {
+        background-color: #006bff;
+        color: #FFF;
+    }
+
+    form p .input-validation-error {
+        border: 1px solid Red;
+        background-color: #fee;
+    }
+
+    table {
+        border: solid 1px #ff6a00;
+    }
+
+        table thead {
+            background: #b6ff00;
+        }
+
+        table td, table th {
+            padding: 10px;
+        }
+</style>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table style="width:50%">
+    <thead>
+        <tr>
+            <th>
+                Id
+            </th>
+            <th>
+                Photo
+            </th>
+            <th>
+                FullName
+            </th>
+            <th>
+                Gender
+            </th>
+            <th>
+                Age
+            </th>
+            <th>
+                DOB
+            </th>
+            <th>
+                CaseType
+            </th>
+            <th>
+                EnquiryRemark
+            </th>
+            <th>
+                PresentAddresss
+            </th>
+            <th>
+                PermanentAddresss
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @item.Id
+            </td>
+            <td>
+                @item.Photo
+            </td>
+            <td>
+                @item.FullName
+            </td>
+            <td>
+                @item.Gender
+            </td>
+            <td>
+                @item.Age
+            </td>
+            <td>
+                @item.DOB
+            </td>
+            <td>
+                @item.CaseType
+            </td>
+            <td>
+                @item.EnquiryRemark
+            </td>
+            <td>
+                @item.PresentAddresss
+            </td>
+            <td>
+                @item.PermanentAddresss
+            </td>
+            <td>
+            <td><a asp-action="Update" asp-route-empname="@item.FullName">Update</a></td>
+            <td>
+                <form asp-action="Delete" method="post">
+                    <input type="hidden" name="empname" value="@item.FullName" />
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
